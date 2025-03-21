@@ -1,0 +1,288 @@
+import { useState, useEffect, useRef } from "react";
+import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+  Legend,
+  Filler,
+} from "chart.js";
+
+// Register Chart.js components
+ChartJS.register(
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+  Legend,
+  Filler
+);
+
+function StockInsights() {
+  const [searchInput, setSearchInput] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [selectedStock, setSelectedStock] = useState(null);
+  const [chartData, setChartData] = useState(null);
+  const [watchlist, setWatchlist] = useState([]);
+  const [aiInsight, setAiInsight] = useState("");
+  const chartRef = useRef(null);
+
+  const stockList = [
+    { name: "Reliance Industries", symbol: "RELIANCE.NS" },
+    { name: "Tata Consultancy Services", symbol: "TCS.NS" },
+    { name: "HDFC Bank", symbol: "HDFCBANK.NS" },
+    { name: "Infosys", symbol: "INFY.NS" },
+    { name: "State Bank of India", symbol: "SBIN.NS" },
+  ];
+
+  // Fetch stock data
+  const fetchStockData = async (symbol) => {
+    try {
+      const response = await fetch("/getStockData", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ symbol }),
+      });
+      const data = await response.json();
+      if (data.error) {
+        setSelectedStock({ error: data.error });
+        setChartData(null);
+      } else {
+        setSelectedStock(data);
+        fetchHistoricalData(symbol);
+        fetchAIInsight(symbol, data); // Pass data here
+      }
+      setSuggestions([]);
+      setSearchInput(
+        stockList.find((s) => s.symbol === symbol)?.name || symbol
+      );
+    } catch (error) {
+      setSelectedStock({ error: "Failed to load stock data." });
+      setChartData(null);
+    }
+  };
+
+  // Fetch historical data (mocked)
+  const fetchHistoricalData = (symbol) => {
+    const labels = Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`);
+    const prices = Array.from(
+      { length: 30 },
+      () => Math.random() * 1000 + 2000
+    );
+    setChartData({
+      labels,
+      datasets: [
+        {
+          label: `${symbol} Price (₹)`,
+          data: prices,
+          borderColor: "rgba(0, 255, 0, 0.8)",
+          backgroundColor: "rgba(0, 255, 0, 0.2)",
+          fill: true,
+          tension: 0.4,
+        },
+      ],
+    });
+  };
+
+  // Fetch AI-driven insight
+  const fetchAIInsight = async (symbol, stockData) => {
+    try {
+      const response = await fetch("/getResponse", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "User",
+          goal: "Stock Analysis",
+          risk: "medium",
+          horizon: "medium",
+          problem: `Provide a detailed investment insight for ${symbol} with current price ₹${stockData.price}, change ₹${stockData.change} (${stockData.changePercent}%).`,
+          language: "English",
+        }),
+      });
+      const data = await response.json();
+      setAiInsight(data.response);
+    } catch (error) {
+      setAiInsight("Couldn’t fetch AI insight.");
+    }
+  };
+
+  // Suggest stocks
+  const suggestStocks = (input) => {
+    if (!input) {
+      setSuggestions([]);
+      setSelectedStock(null);
+      setChartData(null);
+      setAiInsight("");
+      return;
+    }
+    const matches = stockList.filter(
+      (stock) =>
+        stock.name.toLowerCase().includes(input.toLowerCase()) ||
+        stock.symbol.toLowerCase().includes(input.toLowerCase())
+    );
+    setSuggestions(matches);
+  };
+
+  // Add to watchlist
+  const addToWatchlist = () => {
+    if (
+      selectedStock &&
+      !selectedStock.error &&
+      !watchlist.some((item) => item.symbol === selectedStock.symbol)
+    ) {
+      setWatchlist([...watchlist, selectedStock]);
+    }
+  };
+
+  // Cleanup chart
+  useEffect(() => {
+    const currentChart = chartRef.current; // Capture the ref value
+    return () => {
+      if (currentChart && currentChart.chartInstance) {
+        currentChart.chartInstance.destroy();
+      }
+    };
+  }, [chartData]);
+
+  return (
+    <section className="stock-insights">
+      <h2>Stock Insights</h2>
+      <p className="tagline">
+        Dive into India’s markets with real-time data and AI insights.
+      </p>
+
+      {/* Search Bar */}
+      <div className="stock-search">
+        <input
+          type="text"
+          className="stock-search-input"
+          placeholder="Search stocks (e.g., Reliance)"
+          value={searchInput}
+          onChange={(e) => {
+            setSearchInput(e.target.value);
+            suggestStocks(e.target.value);
+          }}
+          onKeyPress={(e) =>
+            e.key === "Enter" &&
+            suggestions.length > 0 &&
+            fetchStockData(suggestions[0].symbol)
+          }
+        />
+        {suggestions.length > 0 && (
+          <div className="suggestions">
+            {suggestions.map((stock) => (
+              <div
+                key={stock.symbol}
+                className="suggestion-item"
+                onClick={() => fetchStockData(stock.symbol)}
+              >
+                {stock.name} ({stock.symbol})
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Stock Dashboard */}
+      {selectedStock && (
+        <div className="stock-dashboard">
+          {/* Stock Details */}
+          <div className="stock-details-card">
+            {selectedStock.error ? (
+              <p>{selectedStock.error}</p>
+            ) : (
+              <>
+                <h3>
+                  {selectedStock.name} ({selectedStock.symbol})
+                </h3>
+                <p className="price">₹{selectedStock.price}</p>
+                <p
+                  className={`change ${
+                    selectedStock.change >= 0 ? "positive" : "negative"
+                  }`}
+                >
+                  {selectedStock.change} ({selectedStock.changePercent}%)
+                </p>
+                <button className="watchlist-btn" onClick={addToWatchlist}>
+                  Add to Watchlist
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Chart and AI Insight Container */}
+          <div className="stock-analysis-container">
+            {/* Chart */}
+            <div className="stock-graph">
+              {chartData ? (
+                <Line
+                  ref={chartRef}
+                  data={chartData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: { position: "top" },
+                      tooltip: { mode: "index", intersect: false },
+                    },
+                    scales: {
+                      x: { title: { display: true, text: "Time" } },
+                      y: {
+                        title: { display: true, text: "Price (₹)" },
+                        beginAtZero: false,
+                      },
+                    },
+                    animation: {
+                      duration: 1500,
+                      easing: "easeInOutQuad",
+                    },
+                  }}
+                />
+              ) : (
+                <p>Select a stock to view its chart.</p>
+              )}
+            </div>
+
+            {/* AI Insight */}
+            <div className="ai-insight">
+              <h4>AI Insight</h4>
+              <div className="ai-insight-content">
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: aiInsight || "Loading insight...",
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Watchlist */}
+      {watchlist.length > 0 && (
+        <div className="watchlist">
+          <h3>Your Watchlist</h3>
+          <div className="watchlist-items">
+            {watchlist.map((stock) => (
+              <div key={stock.symbol} className="watchlist-item">
+                <span>
+                  {stock.name} ({stock.symbol})
+                </span>
+                <span>₹{stock.price}</span>
+                <span className={stock.change >= 0 ? "positive" : "negative"}>
+                  {stock.change} ({stock.changePercent}%)
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+export default StockInsights;
