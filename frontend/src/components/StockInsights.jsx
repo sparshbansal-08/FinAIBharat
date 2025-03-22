@@ -32,11 +32,46 @@ function StockInsights() {
   const chartRef = useRef(null);
 
   const stockList = [
-    { name: "Reliance Industries", symbol: "RELIANCE.NS" },
-    { name: "Tata Consultancy Services", symbol: "TCS.NS" },
-    { name: "HDFC Bank", symbol: "HDFCBANK.NS" },
-    { name: "Infosys", symbol: "INFY.NS" },
-    { name: "State Bank of India", symbol: "SBIN.NS" },
+    { name: "Reliance Industries", symbol: "RELIANCE.NS" }, // Energy/Conglomerate
+    { name: "Tata Consultancy Services", symbol: "TCS.NS" }, // IT Services
+    { name: "HDFC Bank", symbol: "HDFCBANK.NS" }, // Banking
+    { name: "Infosys", symbol: "INFY.NS" }, // IT Services
+    { name: "State Bank of India", symbol: "SBIN.NS" }, // Banking
+    { name: "ICICI Bank", symbol: "ICICIBANK.NS" }, // Banking
+    { name: "Bajaj Finance", symbol: "BAJFINANCE.NS" }, // Financial Services
+    { name: "Tata Motors", symbol: "TATAMOTORS.NS" }, // Automotive
+    { name: "Maruti Suzuki India", symbol: "MARUTI.NS" }, // Automotive
+    { name: "Hindustan Unilever", symbol: "HINDUNILVR.NS" }, // Consumer Goods
+    { name: "ITC Limited", symbol: "ITC.NS" }, // Conglomerate (Tobacco/FMCG)
+    { name: "Bharti Airtel", symbol: "BHARTIARTL.NS" }, // Telecom
+    { name: "Axis Bank", symbol: "AXISBANK.NS" }, // Banking
+    { name: "Kotak Mahindra Bank", symbol: "KOTAKBANK.NS" }, // Banking
+    { name: "Asian Paints", symbol: "ASIANPAINT.NS" }, // Paints/Chemicals
+    { name: "Larsen & Toubro", symbol: "LT.NS" }, // Infrastructure/Engineering
+    { name: "Adani Enterprises", symbol: "ADANIENT.NS" }, // Conglomerate
+    { name: "Sun Pharmaceutical", symbol: "SUNPHARMA.NS" }, // Pharmaceuticals
+    { name: "HCL Technologies", symbol: "HCLTECH.NS" }, // IT Services
+    { name: "Titan Company", symbol: "TITAN.NS" }, // Jewelry/Consumer Goods
+    { name: "Adani Ports & SEZ", symbol: "ADANIPORTS.NS" }, // Infrastructure/Ports
+    { name: "Wipro", symbol: "WIPRO.NS" }, // IT Services
+    { name: "Nestlé India", symbol: "NESTLEIND.NS" }, // Consumer Goods/Food
+    { name: "Dr. Reddy's Laboratories", symbol: "DRREDDY.NS" }, // Pharmaceuticals
+    { name: "Bajaj Auto", symbol: "BAJAJ-AUTO.NS" }, // Automotive
+    { name: "Tech Mahindra", symbol: "TECHM.NS" }, // IT Services
+    { name: "Cipla", symbol: "CIPLA.NS" }, // Pharmaceuticals
+    { name: "Eicher Motors", symbol: "EICHERMOT.NS" }, // Automotive
+    { name: "UltraTech Cement", symbol: "ULTRACEMCO.NS" }, // Cement
+    { name: "Mahindra & Mahindra", symbol: "M&M.NS" }, // Automotive
+    { name: "Power Grid Corporation", symbol: "POWERGRID.NS" }, // Energy/Utilities
+    { name: "NTPC Limited", symbol: "NTPC.NS" }, // Energy/Power
+    { name: "JSW Steel", symbol: "JSWSTEEL.NS" }, // Steel/Metals
+    { name: "Tata Steel", symbol: "TATASTEEL.NS" }, // Steel/Metals
+    { name: "Grasim Industries", symbol: "GRASIM.NS" }, // Conglomerate/Cement
+    { name: "Britannia Industries", symbol: "BRITANNIA.NS" }, // Consumer Goods/Food
+    { name: "Shree Cement", symbol: "SHREECEM.NS" }, // Cement
+    { name: "Divi's Laboratories", symbol: "DIVISLAB.NS" }, // Pharmaceuticals
+    { name: "Hero MotoCorp", symbol: "HEROMOTOCO.NS" }, // Automotive
+    { name: "Oil & Natural Gas Corporation", symbol: "ONGC.NS" }, // Energy/Oil
   ];
 
   // Fetch stock data

@@ -5,14 +5,15 @@ function Hero() {
   const [heroText, setHeroText] = useState("");
   const [queryText, setQueryText] = useState("");
   const fullHeroText = "AI FOR INDIA'S FINANCE FUTURE";
-  const queries = [
-    "How do I start a SIP?",
-    "What’s the best mutual fund?",
-    "How to invest in stocks?",
-    "Is PPF a good option?",
-  ];
 
   useEffect(() => {
+    const queries = [
+      "How do I start a SIP?",
+      "What’s the best mutual fund?",
+      "How to invest in stocks?",
+      "Is PPF a good option?",
+    ];
+
     let heroIndex = 0;
     const typeHeroText = () => {
       if (heroIndex < fullHeroText.length) {
@@ -55,10 +56,19 @@ function Hero() {
           financial guidance. From SIPs to stocks, we make investing simple,
           smart, and accessible.
         </p>
-        <Link to="/chatbot" className="get-started-btn">Get Started</Link>
+        <Link to="/chatbot" className="get-started-btn">
+          Get Started 🤖
+        </Link>
+        <p>
+          ➡️Scroll down to learn more about Stocks ⬅️
+        </p>
       </div>
       <div className="hero-image">
-        <img src="/assets/mobile-mockup.jpg" alt="Mobile Mockup" className="mobile-mockup" />
+        <img
+          src="/assets/mobile-mockup.jpg"
+          alt="Mobile Mockup"
+          className="mobile-mockup"
+        />
         <div className="mockup-inbox">
           <p className="mockup-query">
             {queryText.slice(0, -1)}

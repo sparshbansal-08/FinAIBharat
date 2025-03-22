@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import StockInsights from "./components/StockInsights";
 import Chatbot from "./components/Chatbot";
+import Footer from "./components/Footer"; // Ensure this is correct
 
 function App() {
   return (
@@ -17,10 +18,19 @@ function App() {
               <>
                 <Hero />
                 <StockInsights />
+                <Footer />
               </>
             }
           />
-          <Route path="/chatbot" element={<Chatbot />} />
+          <Route
+            path="/chatbot"
+            element={
+              <>
+                <Chatbot />
+                
+              </>
+            }
+          />
         </Routes>
       </div>
     </Router>
