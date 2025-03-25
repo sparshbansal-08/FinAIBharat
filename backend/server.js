@@ -23,6 +23,26 @@ app.use(cors(
 app.get("/", (req, res) => {
   res.send("FinAI Bharat API is running!");
 });
+app.get("/getStockData", async (req, res) => {
+  const { symbol } = req.query; // Get symbol from query string
+  if (!symbol) {
+    return res.status(400).send({ error: "Symbol is required" });
+  }
+  const cacheKey = `stock-${symbol}`;
+  const cachedData = cache.get(cacheKey);
+
+  if (cachedData) {
+    return res.send(cachedData);
+  }
+
+  try {
+    const stockData = await fetchIndianStockData(symbol);
+    cache.set(cacheKey, stockData);
+    res.send(stockData);
+  } catch (error) {
+    res.status(500).send({ error: "Failed to fetch stock data" });
+  }
+});
 
 async function fetchIndianStockData(symbol) {
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}`;
