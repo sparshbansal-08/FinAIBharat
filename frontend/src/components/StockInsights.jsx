@@ -77,11 +77,14 @@ function StockInsights() {
   // Fetch stock data
   const fetchStockData = async (symbol) => {
     try {
-      const response = await fetch("/getStockData", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ symbol }),
-      });
+      const response = await fetch(
+        "https://finaibharat.onrender.com/getStockData",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ symbol }),
+        }
+      );
       const data = await response.json();
       if (data.error) {
         setSelectedStock({ error: data.error });
@@ -89,7 +92,7 @@ function StockInsights() {
       } else {
         setSelectedStock(data);
         fetchHistoricalData(symbol);
-        fetchAIInsight(symbol, data); // Pass data here
+        fetchAIInsight(symbol, data);
       }
       setSuggestions([]);
       setSearchInput(
@@ -126,18 +129,21 @@ function StockInsights() {
   // Fetch AI-driven insight
   const fetchAIInsight = async (symbol, stockData) => {
     try {
-      const response = await fetch("/getResponse", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: "User",
-          goal: "Stock Analysis",
-          risk: "medium",
-          horizon: "medium",
-          problem: `Provide a detailed investment insight for ${symbol} with current price ₹${stockData.price}, change ₹${stockData.change} (${stockData.changePercent}%).`,
-          language: "English",
-        }),
-      });
+      const response = await fetch(
+        "https://finaibharat.onrender.com/getResponse",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: "User",
+            goal: "Stock Analysis",
+            risk: "medium",
+            horizon: "medium",
+            problem: `Provide a detailed investment insight for ${symbol} with current price ₹${stockData.price}, change ₹${stockData.change} (${stockData.changePercent}%).`,
+            language: "English",
+          }),
+        }
+      );
       const data = await response.json();
       setAiInsight(data.response);
     } catch (error) {

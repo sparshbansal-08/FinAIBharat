@@ -45,11 +45,14 @@ function Chatbot() {
     const fetchStockUpdates = async () => {
       try {
         const stockDataPromises = popularStocks.map(async (symbol) => {
-          const response = await fetch("http://localhost:3000/getStockData", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ symbol }),
-          });
+          const response = await fetch(
+            "https://finaibharat.onrender.com/getStockData",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ symbol }),
+            }
+          );
           return response.json();
         });
 
@@ -85,18 +88,21 @@ function Chatbot() {
     setInput("");
 
     try {
-      const response = await fetch("http://localhost:3000/getResponse", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: "User",
-          goal: "General Investment",
-          risk: "medium",
-          horizon: "medium",
-          problem: input,
-          language,
-        }),
-      });
+      const response = await fetch(
+        "https://finaibharat.onrender.com/getResponse",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: "User",
+            goal: "General Investment",
+            risk: "medium",
+            horizon: "medium",
+            problem: input,
+            language,
+          }),
+        }
+      );
       const data = await response.json();
 
       setMessages((prev) => [
