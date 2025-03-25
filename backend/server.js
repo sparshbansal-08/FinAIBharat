@@ -12,7 +12,13 @@ const cache = new NodeCache({ stdTTL: 600 });
 const genAI = new GoogleGenerativeAI("AIzaSyAw2aHnaXWAE_qgk_BMNmG5iB5jjHLKDAQ");
 
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors(
+  {
+    origin: "*",
+    methods: ["GET, POST"],
+    credentials: true,
+  }
+));
 
 app.get("/", (req, res) => {
   res.send("FinAI Bharat API is running!");
