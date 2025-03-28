@@ -423,7 +423,7 @@ body {
 }
 
 .ai-insight-content strong {
-  color: var(--accent-color); /* #007bff */
+  color: var(--accent-color); 
   font-weight: 600;
 }
 
@@ -432,7 +432,7 @@ body {
   background: #f9f9f9;
   padding: 15px;
   border-radius: 8px;
-  border-left: 4px solid var(--highlight-color); /* #00ff00 */
+  border-left: 4px solid var(--highlight-color); 
   margin-top: 20px;
 }
 
@@ -555,7 +555,7 @@ body {
 /* Chatbot Page */
 .chatbot-page {
   min-height: 150vh;
-  background: url(../public/assets/bg2.jpg) no-repeat center center fixed; /* Replace with your image */
+  background: url(../public/assets/bg2.jpg) no-repeat center center fixed; 
   background-size: cover;
   position: relative;
   z-index: 1;
@@ -568,7 +568,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Overlay for readability */
+  background: rgba(0, 0, 0, 0.5); 
   z-index: -1;
 }
 

@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import StockInsights from "./components/StockInsights";
 import Chatbot from "./components/Chatbot";
-import Footer from "./components/Footer"; // Ensure this is correct
+import Footer from "./components/Footer"; 
 
 function App() {
   return (
